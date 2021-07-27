@@ -6,40 +6,42 @@
 
 #include <FastLED.h>
 
-#define NUM_STRIPS 4
 #define NUM_LEDS_PER_STRIP 52
-#define NUM_LEDS NUM_LEDS_PER_STRIP * NUM_STRIPS
+CRGB arm1Leds[NUM_LEDS_PER_STRIP];
+CRGB arm2Leds[NUM_LEDS_PER_STRIP];
+CRGB arm3Leds[NUM_LEDS_PER_STRIP];
+CRGB arm4Leds[NUM_LEDS_PER_STRIP];
 
-CRGB leds[NUM_STRIPS * NUM_LEDS_PER_STRIP];
 
 // For mirroring strips, all the "special" stuff happens just in setup.  We
 // just addLeds multiple times, once for each strip
 void setup() {
-  // tell FastLED there's 60 NEOPIXEL leds on pin D1, starting at index 0 in the led array
-  FastLED.addLeds<NEOPIXEL, D1>(leds, 0, NUM_LEDS_PER_STRIP);
+  // tell FastLED there's 60 NEOPIXEL leds on pin 10
+  FastLED.addLeds<NEOPIXEL, D1>(arm1Leds, NUM_LEDS_PER_STRIP);
 
-  // tell FastLED there's 60 NEOPIXEL leds on pin D2, starting at index 60 in the led array
-  FastLED.addLeds<NEOPIXEL, D2>(leds, NUM_LEDS_PER_STRIP, NUM_LEDS_PER_STRIP);
+  // tell FastLED there's 60 NEOPIXEL leds on pin 11
+  FastLED.addLeds<NEOPIXEL, D2>(arm2Leds, NUM_LEDS_PER_STRIP);
 
-  // tell FastLED there's 60 NEOPIXEL leds on pin D3, starting at index 120 in the led array
-  FastLED.addLeds<NEOPIXEL, D3>(leds, 2 * NUM_LEDS_PER_STRIP, NUM_LEDS_PER_STRIP);
+  // tell FastLED there's 60 NEOPIXEL leds on pin 12
+  FastLED.addLeds<NEOPIXEL, D3>(arm3Leds, NUM_LEDS_PER_STRIP);
 
-    // tell FastLED there's 60 NEOPIXEL leds on pin D4, starting at index 120 in the led array
-  FastLED.addLeds<NEOPIXEL, D4>(leds, 3 * NUM_LEDS_PER_STRIP, NUM_LEDS_PER_STRIP);
+  // tell FastLED there's 60 NEOPIXEL leds on pin 12
+  FastLED.addLeds<NEOPIXEL, D4>(arm4Leds, NUM_LEDS_PER_STRIP);
+
+  FastLED.setBrightness(50);
 
 }
 
 void loop() {
-  for(int i = 0; i < NUM_LEDS_PER_STRIP; i++) {
-    leds[i] = CRGB::Red;
-    leds[i +     NUM_LEDS_PER_STRIP] = CRGB::Red;
-    leds[i + 2 * NUM_LEDS_PER_STRIP] = CRGB::Red;
-    leds[i + 3 * NUM_LEDS_PER_STRIP] = CRGB::Red;
+    uint16_t beatA = beatsin16(35, 0, 255);
+    uint16_t beatB = beatsin16(30, 0, 255);
+    uint16_t beatC = beatsin16(25, 0, 255);
+    uint16_t beatD = beatsin16(20, 0, 255);
+
+    fill_rainbow(arm1Leds, NUM_LEDS_PER_STRIP, (beatA+beatB)/2, 8);
+    fill_rainbow(arm2Leds, NUM_LEDS_PER_STRIP, (beatB+beatC)/2, 8);
+    fill_rainbow(arm3Leds, NUM_LEDS_PER_STRIP, (beatC+beatD)/2, 8);
+    fill_rainbow(arm4Leds, NUM_LEDS_PER_STRIP, (beatD+beatA)/2, 8);
+
     FastLED.show();
-    leds[i] = CRGB::Black;
-    leds[i +     NUM_LEDS_PER_STRIP] = CRGB::Black;
-    leds[i + 2 * NUM_LEDS_PER_STRIP] = CRGB::Black;
-    leds[i + 3 * NUM_LEDS_PER_STRIP] = CRGB::Black;
-    delay(50);
-  }
 }
