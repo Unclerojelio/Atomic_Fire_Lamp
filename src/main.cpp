@@ -29,6 +29,10 @@ void setup() {
   FastLED.addLeds<NEOPIXEL, D4>(arm4Leds, NUM_LEDS_PER_STRIP);
 
   FastLED.setBrightness(50);
+  FastLED.clear(true);
+
+  Serial.begin(57600);
+
 
 }
 
