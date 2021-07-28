@@ -37,10 +37,16 @@ void setup() {
 }
 
 void loop() {
+  /*
     uint16_t beatA = beatsin16(35, 0, 255);
     uint16_t beatB = beatsin16(30, 0, 255);
     uint16_t beatC = beatsin16(25, 0, 255);
     uint16_t beatD = beatsin16(20, 0, 255);
+  */
+    uint16_t beatA = beat8(35);
+    uint16_t beatB = beat8(30);
+    uint16_t beatC = beat8(25);
+    uint16_t beatD = beat8(20);
 
     fill_rainbow(arm1Leds, NUM_LEDS_PER_STRIP, (beatA+beatB)/2, 8);
     fill_rainbow(arm2Leds, NUM_LEDS_PER_STRIP, (beatB+beatC)/2, 8);
