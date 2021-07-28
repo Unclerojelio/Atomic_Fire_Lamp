@@ -5,12 +5,15 @@
 // different pins, each strip will be referring to a different part of the single led array
 
 #include <FastLED.h>
+#include "../include/fire.h"
 
 #define NUM_LEDS_PER_STRIP 52
 CRGB arm1Leds[NUM_LEDS_PER_STRIP];
 CRGB arm2Leds[NUM_LEDS_PER_STRIP];
 CRGB arm3Leds[NUM_LEDS_PER_STRIP];
 CRGB arm4Leds[NUM_LEDS_PER_STRIP];
+
+ClassicFireEffect fire(NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
 
 
 // For mirroring strips, all the "special" stuff happens just in setup.  We
@@ -32,8 +35,6 @@ void setup() {
   FastLED.clear(true);
 
   Serial.begin(57600);
-
-
 }
 
 void loop() {
@@ -43,6 +44,8 @@ void loop() {
     uint16_t beatC = beatsin16(25, 0, 255);
     uint16_t beatD = beatsin16(20, 0, 255);
   */
+
+  /*
     uint16_t beatA = beat8(35);
     uint16_t beatB = beat8(30);
     uint16_t beatC = beat8(25);
@@ -52,6 +55,9 @@ void loop() {
     fill_rainbow(arm2Leds, NUM_LEDS_PER_STRIP, (beatB+beatC)/2, 8);
     fill_rainbow(arm3Leds, NUM_LEDS_PER_STRIP, (beatC+beatD)/2, 8);
     fill_rainbow(arm4Leds, NUM_LEDS_PER_STRIP, (beatD+beatA)/2, 8);
+  */
 
+    fire.DrawFire();
     FastLED.show();
+    delay(33);
 }
