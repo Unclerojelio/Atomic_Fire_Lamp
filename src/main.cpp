@@ -19,6 +19,9 @@ ClassicFireEffect fire(NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // O
 // For mirroring strips, all the "special" stuff happens just in setup.  We
 // just addLeds multiple times, once for each strip
 void setup() {
+
+  pinMode(LED_BUILTIN, OUTPUT);
+
   // tell FastLED there's 60 NEOPIXEL leds on pin 10
   FastLED.addLeds<NEOPIXEL, D1>(arm1Leds, NUM_LEDS_PER_STRIP);
 
@@ -59,5 +62,9 @@ void loop() {
 
     fire.DrawFire();
     FastLED.show();
+
+    EVERY_N_SECONDS(1) {
+      digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+    }
     delay(33);
 }
