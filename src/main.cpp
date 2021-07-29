@@ -3,7 +3,10 @@
 #include "../include/fire.h"
 
 #define NUM_LEDS_PER_STRIP 52
-#define ARM1 4
+
+// These pins are usually used for the OLED display. If we later want to use the OLED then
+// move the data wires to 13,12,14,27 
+#define ARM1 4           
 #define ARM2 16
 #define ARM3 17
 #define ARM4 5
