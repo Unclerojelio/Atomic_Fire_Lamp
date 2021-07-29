@@ -23,16 +23,16 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
 
   // tell FastLED there's 60 NEOPIXEL leds on pin 10
-  FastLED.addLeds<NEOPIXEL, D1>(arm1Leds, NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<NEOPIXEL, 4>(arm1Leds, NUM_LEDS_PER_STRIP);
 
   // tell FastLED there's 60 NEOPIXEL leds on pin 11
-  FastLED.addLeds<NEOPIXEL, D2>(arm2Leds, NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<NEOPIXEL, 16>(arm2Leds, NUM_LEDS_PER_STRIP);
 
   // tell FastLED there's 60 NEOPIXEL leds on pin 12
-  FastLED.addLeds<NEOPIXEL, D3>(arm3Leds, NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<NEOPIXEL, 17>(arm3Leds, NUM_LEDS_PER_STRIP);
 
   // tell FastLED there's 60 NEOPIXEL leds on pin 12
-  FastLED.addLeds<NEOPIXEL, D4>(arm4Leds, NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<NEOPIXEL, 5>(arm4Leds, NUM_LEDS_PER_STRIP);
 
   FastLED.setBrightness(50);
   FastLED.clear(true);
