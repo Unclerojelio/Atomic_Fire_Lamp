@@ -1,38 +1,35 @@
 #include <Arduino.h>
-
-// MultipleStripsInOneArray - see https://github.com/FastLED/FastLED/wiki/Multiple-Controller-Examples for more info on
-// using multiple controllers.  In this example, we're going to set up four NEOPIXEL strips on three
-// different pins, each strip will be referring to a different part of the single led array
-
 #include <FastLED.h>
 #include "../include/fire.h"
 
 #define NUM_LEDS_PER_STRIP 52
+#define ARM1 4
+#define ARM2 16
+#define ARM3 17
+#define ARM4 5
+
 CRGB arm1Leds[NUM_LEDS_PER_STRIP];
 CRGB arm2Leds[NUM_LEDS_PER_STRIP];
 CRGB arm3Leds[NUM_LEDS_PER_STRIP];
 CRGB arm4Leds[NUM_LEDS_PER_STRIP];
 
-//ClassicFireEffect fire(NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
+//ClassicFireEffect fire1(NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
+//ClassicFireEffect fire2(NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
+//ClassicFireEffect fire3(NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
+//ClassicFireEffect fire4(NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
 
-
-// For mirroring strips, all the "special" stuff happens just in setup.  We
-// just addLeds multiple times, once for each strip
 void setup() {
 
   pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(ARM1, OUTPUT);
+  pinMode(ARM2, OUTPUT);
+  pinMode(ARM3, OUTPUT);
+  pinMode(ARM4, OUTPUT);
 
-  // tell FastLED there's 60 NEOPIXEL leds on pin 10
-  FastLED.addLeds<NEOPIXEL, 4>(arm1Leds, NUM_LEDS_PER_STRIP);
-
-  // tell FastLED there's 60 NEOPIXEL leds on pin 11
-  FastLED.addLeds<NEOPIXEL, 16>(arm2Leds, NUM_LEDS_PER_STRIP);
-
-  // tell FastLED there's 60 NEOPIXEL leds on pin 12
-  FastLED.addLeds<NEOPIXEL, 17>(arm3Leds, NUM_LEDS_PER_STRIP);
-
-  // tell FastLED there's 60 NEOPIXEL leds on pin 12
-  FastLED.addLeds<NEOPIXEL, 5>(arm4Leds, NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<NEOPIXEL, ARM1>(arm1Leds, NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<NEOPIXEL, ARM2>(arm2Leds, NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<NEOPIXEL, ARM3>(arm3Leds, NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<NEOPIXEL, ARM4>(arm4Leds, NUM_LEDS_PER_STRIP);
 
   FastLED.setBrightness(50);
   FastLED.clear(true);
@@ -59,7 +56,10 @@ void loop() {
     fill_rainbow(arm4Leds, NUM_LEDS_PER_STRIP, (beatD+beatA)/2, 8);
   
 
-    //fire.DrawFire();
+    //fire1.DrawFire();
+    //fire2.DrawFire();
+    //fire3.DrawFire();
+    //fire4.DrawFire();
     FastLED.show();
 
     EVERY_N_SECONDS(1) {
