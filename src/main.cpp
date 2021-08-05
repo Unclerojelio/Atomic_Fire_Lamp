@@ -16,7 +16,7 @@ CRGB arm2Leds[NUM_LEDS_PER_STRIP];
 CRGB arm3Leds[NUM_LEDS_PER_STRIP];
 CRGB arm4Leds[NUM_LEDS_PER_STRIP];
 
-static int counter = 0;
+int counter = 0;
 
 //ClassicFireEffect fire1(NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
 //ClassicFireEffect fire2(NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
