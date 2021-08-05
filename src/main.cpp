@@ -16,10 +16,36 @@ CRGB arm2Leds[NUM_LEDS_PER_STRIP];
 CRGB arm3Leds[NUM_LEDS_PER_STRIP];
 CRGB arm4Leds[NUM_LEDS_PER_STRIP];
 
+static int counter = 0;
+
 //ClassicFireEffect fire1(NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
 //ClassicFireEffect fire2(NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
 //ClassicFireEffect fire3(NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
 //ClassicFireEffect fire4(NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
+
+void rainbow_wobble() {
+  uint16_t beatA = beatsin16(35, 0, 255);
+  uint16_t beatB = beatsin16(30, 0, 255);
+  uint16_t beatC = beatsin16(25, 0, 255);
+  uint16_t beatD = beatsin16(20, 0, 255);
+
+  fill_rainbow(arm1Leds, NUM_LEDS_PER_STRIP, (beatA+beatB)/2, 8);
+  fill_rainbow(arm2Leds, NUM_LEDS_PER_STRIP, (beatB+beatC)/2, 8);
+  fill_rainbow(arm3Leds, NUM_LEDS_PER_STRIP, (beatC+beatD)/2, 8);
+  fill_rainbow(arm4Leds, NUM_LEDS_PER_STRIP, (beatD+beatA)/2, 8);
+}
+
+void rainbow_crawl() {
+  uint16_t beatA = beat8(35);
+  uint16_t beatB = beat8(30);
+  uint16_t beatC = beat8(25);
+  uint16_t beatD = beat8(20);
+  
+  fill_rainbow(arm1Leds, NUM_LEDS_PER_STRIP, beatA, 8);
+  fill_rainbow(arm2Leds, NUM_LEDS_PER_STRIP, beatB, 8);
+  fill_rainbow(arm3Leds, NUM_LEDS_PER_STRIP, beatC, 8);
+  fill_rainbow(arm4Leds, NUM_LEDS_PER_STRIP, beatD, 8);
+}
 
 void setup() {
 
@@ -41,31 +67,20 @@ void setup() {
 }
 
 void loop() {
-  /*
-  // Rainbow Wobble
-  uint16_t beatA = beatsin16(35, 0, 255);
-  uint16_t beatB = beatsin16(30, 0, 255);
-  uint16_t beatC = beatsin16(25, 0, 255);
-  uint16_t beatD = beatsin16(20, 0, 255);
 
-  fill_rainbow(arm1Leds, NUM_LEDS_PER_STRIP, (beatA+beatB)/2, 8);
-  fill_rainbow(arm2Leds, NUM_LEDS_PER_STRIP, (beatB+beatC)/2, 8);
-  fill_rainbow(arm3Leds, NUM_LEDS_PER_STRIP, (beatC+beatD)/2, 8);
-  fill_rainbow(arm4Leds, NUM_LEDS_PER_STRIP, (beatD+beatA)/2, 8);
-  // Rainbow Wobble
-  */
+EVERY_N_MINUTES(2) {
+  counter++;
+  if(counter>1) {
+    counter = 0;
+  }
+}
 
-  // Rainbow Crawl
-  uint16_t beatA = beat8(35);
-  uint16_t beatB = beat8(30);
-  uint16_t beatC = beat8(25);
-  uint16_t beatD = beat8(20);
-  
-  fill_rainbow(arm1Leds, NUM_LEDS_PER_STRIP, beatA, 8);
-  fill_rainbow(arm2Leds, NUM_LEDS_PER_STRIP, beatB, 8);
-  fill_rainbow(arm3Leds, NUM_LEDS_PER_STRIP, beatC, 8);
-  fill_rainbow(arm4Leds, NUM_LEDS_PER_STRIP, beatD, 8);
-  // Rainbow Crawl
+if(counter == 0) {
+  rainbow_wobble();
+}
+else {
+  rainbow_crawl();
+}
 
   //fire1.DrawFire();
   //fire2.DrawFire();
