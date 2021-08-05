@@ -35,16 +35,24 @@ void rainbow_wobble() {
   fill_rainbow(arm4Leds, NUM_LEDS_PER_STRIP, (beatD+beatA)/2, 8);
 }
 
-void rainbow_crawl() {
+void rainbow_crawl(bool reverse=false) {
   uint16_t beatA = beat8(35);
   uint16_t beatB = beat8(30);
   uint16_t beatC = beat8(25);
   uint16_t beatD = beat8(20);
   
-  fill_rainbow(arm1Leds, NUM_LEDS_PER_STRIP, beatA, 8);
-  fill_rainbow(arm2Leds, NUM_LEDS_PER_STRIP, beatB, 8);
-  fill_rainbow(arm3Leds, NUM_LEDS_PER_STRIP, beatC, 8);
-  fill_rainbow(arm4Leds, NUM_LEDS_PER_STRIP, beatD, 8);
+  if(reverse) {
+    fill_rainbow(arm1Leds, NUM_LEDS_PER_STRIP, 255-beatA, 8);
+    fill_rainbow(arm2Leds, NUM_LEDS_PER_STRIP, 255-beatB, 8);
+    fill_rainbow(arm3Leds, NUM_LEDS_PER_STRIP, 255-beatC, 8);
+    fill_rainbow(arm4Leds, NUM_LEDS_PER_STRIP, 255-beatD, 8);
+  }
+  else {
+    fill_rainbow(arm1Leds, NUM_LEDS_PER_STRIP, beatA, 8);
+    fill_rainbow(arm2Leds, NUM_LEDS_PER_STRIP, beatB, 8);
+    fill_rainbow(arm3Leds, NUM_LEDS_PER_STRIP, beatC, 8);
+    fill_rainbow(arm4Leds, NUM_LEDS_PER_STRIP, beatD, 8);
+  }
 }
 
 void setup() {
@@ -68,18 +76,24 @@ void setup() {
 
 void loop() {
 
-EVERY_N_MINUTES(2) {
+EVERY_N_MINUTES(1) {
   counter++;
-  if(counter>1) {
+  if(counter>3) {
     counter = 0;
   }
 }
 
 if(counter == 0) {
+  rainbow_crawl(false);
+}
+else if(counter == 1) {
   rainbow_wobble();
 }
+else if(counter == 2) {
+  rainbow_crawl(true);
+}
 else {
-  rainbow_crawl();
+  rainbow_wobble();
 }
 
   //fire1.DrawFire();
