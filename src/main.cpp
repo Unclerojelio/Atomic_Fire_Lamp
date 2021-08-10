@@ -1,3 +1,17 @@
+//+--------------------------------------------------------------------------
+//
+// Atomic Fire Lamp - (c) 2021 Roger Banks.  All Rights Reserved.
+//
+// File:        main.cpp
+//
+// Description:
+//
+//   Atomic Fire Lamp is a lamp retrofitted with 4 WS2812b RGB LED strips.
+//   This project controls those led strips with various animations and
+//   effects.
+//
+//---------------------------------------------------------------------------
+
 #include <Arduino.h>
 #include <FastLED.h>
 #include "fire.h"
