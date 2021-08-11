@@ -94,6 +94,7 @@ class FireEffectSmooth
 class ClassicFireEffect
 {
 protected:
+    CRGB*   Buffer;
     int     Size;
     int     Cooling;
     int     Sparks;
@@ -117,8 +118,9 @@ public:
     
     // Lower sparking -> more flicker.  Higher sparking -> more consistent flame
 
-    ClassicFireEffect(int size, int cooling = 80, int sparking = 50, int sparks = 3, int sparkHeight = 4, bool breversed = true, bool bmirrored = true) 
-        : Size(size),
+    ClassicFireEffect(CRGB* buffer, int size, int cooling = 80, int sparking = 50, int sparks = 3, int sparkHeight = 4, bool breversed = true, bool bmirrored = true) 
+        : Buffer(buffer),
+          Size(size),
           Cooling(cooling),
           Sparks(sparks),
           SparkHeight(sparkHeight),
@@ -166,11 +168,11 @@ public:
         {
             CRGB color = HeatColor(heat[i]);
             int j = bReversed ? (Size - 1 - i) : i;
-            DrawPixels(j, 1, color);
+            DrawPixels(Buffer, j, 1, color);
             if (bMirrored)
             {
                 int j2 = !bReversed ? (2 * Size - 1 - i) : Size + i;
-                DrawPixels(j2, 1, color);
+                DrawPixels(Buffer, j2, 1, color);
             }
         }
     }
