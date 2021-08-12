@@ -44,6 +44,7 @@ void setup() {
 
 void loop() {
 
+  FastLED.clear();
   fire1.DrawFire();
   fire2.DrawFire();
   fire3.DrawFire();
