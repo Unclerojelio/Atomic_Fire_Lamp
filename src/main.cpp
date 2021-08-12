@@ -23,6 +23,30 @@
 #include "secrets.h"
 
 char auth[] = BLYNK_AUTH;
+uint8_t blynk_brightness = 255;
+uint8_t blynk_animation = 0;
+
+BLYNK_WRITE(V0)
+{
+  blynk_brightness = param.asInt(); // assigning incoming value from pin V1 to a variable
+}
+
+BLYNK_WRITE(V1)
+{
+  switch (param.asInt())
+  {
+  case 1:
+    blynk_animation = 0;
+    break;
+
+  case 2:
+    blynk_animation = 1;
+    break;
+  
+  default:
+    break;
+  }
+}
 
 ClassicFireEffect fire1(arm1Leds, NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
 ClassicFireEffect fire2(arm2Leds, NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
@@ -30,6 +54,8 @@ ClassicFireEffect fire3(arm3Leds, NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false
 ClassicFireEffect fire4(arm4Leds, NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
 
 void setup() {
+
+  Serial.begin(57600);
 
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(ARM1, OUTPUT);
@@ -45,18 +71,30 @@ void setup() {
   FastLED.setBrightness(50);
   FastLED.clear(true);
 
-  Serial.begin(57600);
+  Blynk.setDeviceName("Atomic_Fire_Lamp");
+  Blynk.begin(auth);
 }
 
 void loop() {
 
-  FastLED.clear();
-  fire1.DrawFire();
-  fire2.DrawFire();
-  fire3.DrawFire();
-  fire4.DrawFire();
-  //DrawRainbow();
-  FastLED.show();
+  switch (blynk_animation)
+  {
+  case 1:
+    DrawRainbow();
+    break;
+
+  case 2:
+    FastLED.clear();
+    fire1.DrawFire();
+    fire2.DrawFire();
+    fire3.DrawFire();
+    fire4.DrawFire();
+    break;
+  }
+
+  FastLED.show(blynk_brightness);
+
+  Blynk.run();
 
   EVERY_N_SECONDS(1) {
     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
