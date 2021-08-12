@@ -14,9 +14,15 @@
 
 #include <Arduino.h>
 #include <FastLED.h>
+#include <BlynkSimpleEsp32_BLE.h>
+#include <BLEDevice.h>
+#include <BLEServer.h>
 #include "fire.h"
 #include "lamp.h"
 #include "rainbow.h"
+#include "secrets.h"
+
+char auth[] = BLYNK_AUTH;
 
 ClassicFireEffect fire1(arm1Leds, NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
 ClassicFireEffect fire2(arm2Leds, NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
