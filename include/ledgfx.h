@@ -53,7 +53,7 @@ CRGB ColorFraction(CRGB colorIn, float fraction)
   return CRGB(colorIn).fadeToBlackBy(255 * (1.0f - fraction));
 }
 
-void DrawPixels(float fPos, float count, CRGB color)
+void DrawPixels(CRGB* buffer, float fPos, float count, CRGB color)
 {
   // Calculate how much the first pixel will hold
   float availFirstPixel = 1.0f - (fPos - (long)(fPos));
@@ -65,7 +65,7 @@ void DrawPixels(float fPos, float count, CRGB color)
 
   if (remaining > 0.0f)
   {
-    FastLED.leds()[iPos++] += ColorFraction(color, amtFirstPixel);
+    buffer[iPos++] += ColorFraction(color, amtFirstPixel);
     remaining -= amtFirstPixel;
   }
 
@@ -73,7 +73,7 @@ void DrawPixels(float fPos, float count, CRGB color)
 
   while (remaining > 1.0f)
   {
-    FastLED.leds()[iPos++] += color;
+    buffer[iPos++] += color;
     remaining--;
   }
 
@@ -81,6 +81,6 @@ void DrawPixels(float fPos, float count, CRGB color)
 
   if (remaining > 0.0f)
   {
-    FastLED.leds()[iPos] += ColorFraction(color, remaining);
+    buffer[iPos] += ColorFraction(color, remaining);
   }
 }
