@@ -12,6 +12,9 @@
 //
 //---------------------------------------------------------------------------
 
+//#define BLYNK_PRINT Serial
+#define BLYNK_USE_DIRECT_CONNECT
+
 #include <Arduino.h>
 #include <FastLED.h>
 #include <BlynkSimpleEsp32_BLE.h>
@@ -24,7 +27,7 @@
 
 char auth[] = BLYNK_AUTH;
 uint8_t blynk_brightness = 255;
-uint8_t blynk_animation = 0;
+uint8_t blynk_animation = 1;
 
 BLYNK_WRITE(V0)
 {
@@ -71,6 +74,7 @@ void setup() {
   FastLED.setBrightness(50);
   FastLED.clear(true);
 
+  Serial.println("Waiting for connections...");
   Blynk.setDeviceName("Atomic_Fire_Lamp");
   Blynk.begin(auth);
 }
