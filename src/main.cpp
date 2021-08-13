@@ -36,19 +36,7 @@ BLYNK_WRITE(V0)
 
 BLYNK_WRITE(V1)
 {
-  switch (param.asInt())
-  {
-  case 1:
-    blynk_animation = 1;
-    break;
-
-  case 2:
-    blynk_animation = 2;
-    break;
-  
-  default:
-    break;
-  }
+  blynk_animation = param.asInt();
 }
 
 ClassicFireEffect fire1(arm1Leds, NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
