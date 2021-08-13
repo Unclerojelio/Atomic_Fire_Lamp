@@ -91,5 +91,5 @@ void loop() {
   EVERY_N_SECONDS(1) {
     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
   }
-  FastLED.delay(33);
+  FastLED.delay(10);
 }
