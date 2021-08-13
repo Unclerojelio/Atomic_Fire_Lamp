@@ -39,11 +39,11 @@ BLYNK_WRITE(V1)
   switch (param.asInt())
   {
   case 1:
-    blynk_animation = 0;
+    blynk_animation = 1;
     break;
 
   case 2:
-    blynk_animation = 1;
+    blynk_animation = 2;
     break;
   
   default:
