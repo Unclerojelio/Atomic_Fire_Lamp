@@ -23,6 +23,7 @@
 #include "fire.h"
 #include "lamp.h"
 #include "rainbow.h"
+#include "solid.h"
 #include "secrets.h"
 
 char auth[] = BLYNK_AUTH;
@@ -81,6 +82,15 @@ void loop() {
     fire2.DrawFire();
     fire3.DrawFire();
     fire4.DrawFire();
+    FastLED.delay(20);
+    break;
+
+  case 3:
+    DrawSolid(CRGB::White);
+    break;
+
+  case 4:
+    DrawSolid(CRGB::Black);
     break;
   }
 
@@ -91,5 +101,4 @@ void loop() {
   EVERY_N_SECONDS(1) {
     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
   }
-  FastLED.delay(10);
 }
