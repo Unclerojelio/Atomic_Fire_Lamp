@@ -45,9 +45,9 @@ BLYNK_WRITE(V1)
 
 BLYNK_WRITE(V2)
 {
-  blynk_red = param[0].asInt();
-  blynk_red = param[1].asInt();
-  blynk_red = param[2].asInt();
+  blynk_red   = param[0].asInt();
+  blynk_green = param[1].asInt();
+  blynk_blue  = param[2].asInt();
 }
 
 ClassicFireEffect fire1(arm1Leds, NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
