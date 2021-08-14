@@ -23,11 +23,15 @@
 #include "fire.h"
 #include "lamp.h"
 #include "rainbow.h"
+#include "solid.h"
 #include "secrets.h"
 
 char auth[] = BLYNK_AUTH;
 uint8_t blynk_brightness = 255;
 uint8_t blynk_animation = 1;
+uint8_t blynk_red   = 0;
+uint8_t blynk_green = 0;
+uint8_t blynk_blue  = 0;
 
 BLYNK_WRITE(V0)
 {
@@ -37,6 +41,13 @@ BLYNK_WRITE(V0)
 BLYNK_WRITE(V1)
 {
   blynk_animation = param.asInt();
+}
+
+BLYNK_WRITE(V2)
+{
+  blynk_red   = param[0].asInt();
+  blynk_green = param[1].asInt();
+  blynk_blue  = param[2].asInt();
 }
 
 ClassicFireEffect fire1(arm1Leds, NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
@@ -81,6 +92,19 @@ void loop() {
     fire2.DrawFire();
     fire3.DrawFire();
     fire4.DrawFire();
+    FastLED.delay(20);
+    break;
+
+  case 3:
+    DrawSolid(CRGB::White);
+    break;
+
+  case 4:
+    DrawSolid(CRGB::Black);
+    break;
+
+  case 5:
+    DrawSolid(CRGB(blynk_red, blynk_green, blynk_blue));
     break;
   }
 
@@ -91,5 +115,4 @@ void loop() {
   EVERY_N_SECONDS(1) {
     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
   }
-  FastLED.delay(10);
 }
