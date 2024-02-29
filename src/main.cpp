@@ -13,6 +13,7 @@
 //---------------------------------------------------------------------------
 
 // https://www.upesy.com/blogs/tutorials/how-to-connect-wifi-acces-point-with-esp32
+// https://randomnerdtutorials.com/esp32-mqtt-publish-subscribe-arduino-ide/
 
 
 #include <Arduino.h>
@@ -97,7 +98,8 @@ void setup() {
 
   WiFi.mode(WIFI_STA); //Optional
   WiFi.begin(ssid, password);
-  Serial.println("\nConnecting");
+  delay(2000);
+  Serial.print("\nConnecting .");
 
   while(WiFi.status() != WL_CONNECTED){
       Serial.print(".");
