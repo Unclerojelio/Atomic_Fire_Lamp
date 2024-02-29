@@ -14,6 +14,7 @@
 
 // https://www.upesy.com/blogs/tutorials/how-to-connect-wifi-acces-point-with-esp32
 // https://randomnerdtutorials.com/esp32-mqtt-publish-subscribe-arduino-ide/
+// https://randomnerdtutorials.com/solved-reconnect-esp32-to-wifi/
 
 
 #include <Arduino.h>
