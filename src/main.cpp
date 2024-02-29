@@ -12,43 +12,18 @@
 //
 //---------------------------------------------------------------------------
 
-//#define BLYNK_PRINT Serial
-#define BLYNK_USE_DIRECT_CONNECT
+// https://www.upesy.com/blogs/tutorials/how-to-connect-wifi-acces-point-with-esp32
+
 
 #include <Arduino.h>
 #include <FastLED.h>
-#include <BlynkSimpleEsp32_BLE.h>
-#include <BLEDevice.h>
-#include <BLEServer.h>
+#include <WiFi.h>
 #include "fire.h"
 #include "lamp.h"
 #include "rainbow.h"
 #include "solid.h"
 #include "secrets.h"
 
-char auth[] = BLYNK_AUTH;
-uint8_t blynk_brightness = 255;
-uint8_t blynk_animation = 1;
-uint8_t blynk_red   = 0;
-uint8_t blynk_green = 0;
-uint8_t blynk_blue  = 0;
-
-BLYNK_WRITE(V0)
-{
-  blynk_brightness = param.asInt(); // assigning incoming value from pin V1 to a variable
-}
-
-BLYNK_WRITE(V1)
-{
-  blynk_animation = param.asInt();
-}
-
-BLYNK_WRITE(V2)
-{
-  blynk_red   = param[0].asInt();
-  blynk_green = param[1].asInt();
-  blynk_blue  = param[2].asInt();
-}
 
 ClassicFireEffect fire1(arm1Leds, NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
 ClassicFireEffect fire2(arm2Leds, NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
@@ -57,7 +32,24 @@ ClassicFireEffect fire4(arm4Leds, NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false
 
 void setup() {
 
-  Serial.begin(57600);
+  Serial.begin(115200);
+
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
+
+  WiFi.mode(WIFI_STA); //Optional
+  WiFi.begin(ssid, password);
+  Serial.println("\nConnecting");
+
+  while(WiFi.status() != WL_CONNECTED){
+      Serial.print(".");
+      delay(100);
+  }
+
+  Serial.println("\nConnected to the WiFi network");
+  Serial.print("Local ESP32 IP: ");
+  Serial.println(WiFi.localIP());
 
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(ARM1, OUTPUT);
@@ -74,13 +66,11 @@ void setup() {
   FastLED.clear(true);
 
   Serial.println("Waiting for connections...");
-  Blynk.setDeviceName("Atomic_Fire_Lamp");
-  Blynk.begin(auth);
 }
 
 void loop() {
 
-  switch (blynk_animation)
+  switch (1)
   {
   case 1:
     DrawRainbow();
@@ -104,13 +94,11 @@ void loop() {
     break;
 
   case 5:
-    DrawSolid(CRGB(blynk_red, blynk_green, blynk_blue));
+    DrawSolid(CRGB(255, 0, 0));
     break;
   }
 
-  FastLED.show(blynk_brightness);
-
-  Blynk.run();
+  FastLED.show(50);
 
   EVERY_N_SECONDS(1) {
     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
