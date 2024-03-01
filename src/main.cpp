@@ -32,7 +32,9 @@ long lastMsg = 0;
 char msg[50];
 int value = 0;
 
-const char* mqtt_server = "YOUR_MQTT_BROKER_IP_ADDRESS";
+int mode = 1;
+
+const char* mqtt_server = "mqtt-broker.local";
 
 ClassicFireEffect fire1(arm1Leds, NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
 ClassicFireEffect fire2(arm2Leds, NUM_LEDS_PER_STRIP, 20, 100, 3, 4, true, false);     // Outwards from Zero
@@ -57,13 +59,21 @@ void callback(char* topic, byte* message, unsigned int length) {
   // Changes the output state according to the message
   if (String(topic) == "esp32/output") {
     Serial.print("Changing output to ");
-    if(messageTemp == "on"){
-      Serial.println("on");
-      //digitalWrite(ledPin, HIGH);
+    if(messageTemp == "1"){
+      Serial.println("Rainbow");
+      mode = 1;
     }
-    else if(messageTemp == "off"){
-      Serial.println("off");
-      //digitalWrite(ledPin, LOW);
+    else if(messageTemp == "2"){
+      Serial.println("Fire");
+      mode = 2;
+    }
+    else if(messageTemp == "3"){
+      Serial.println("White");
+      mode = 3;
+    }
+    else if(messageTemp == "4"){
+      Serial.println("Off");
+      mode = 4;
     }
   }
 }
@@ -138,10 +148,11 @@ void loop() {
   }
   client.loop();
 
-  switch (1)
+  switch (mode)
   {
   case 1:
     DrawRainbow();
+    //client.publish("esp32/status", "Rainbow");
     break;
 
   case 2:
@@ -151,14 +162,17 @@ void loop() {
     fire3.DrawFire();
     fire4.DrawFire();
     FastLED.delay(20);
+    //client.publish("esp32/status", "Fire");
     break;
 
   case 3:
     DrawSolid(CRGB::White);
+    //client.publish("esp32/status", "White");
     break;
 
   case 4:
     DrawSolid(CRGB::Black);
+    //client.publish("esp32/status", "Off");
     break;
 
   case 5:
