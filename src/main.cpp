@@ -16,6 +16,9 @@
 // https://randomnerdtutorials.com/esp32-mqtt-publish-subscribe-arduino-ide/
 // https://randomnerdtutorials.com/solved-reconnect-esp32-to-wifi/
 
+// Configured in Ha with this message:
+// mosquitto_pub -r -t "homeassistant/light/Atomic_Fire_Lamp/config" -m '{"name": "Atomic_Fire_Lamp", "command_topic": "homeassistant/light/Atomic_Fire_Lamp/set", "state_topic": "homeassistant/light/Atomic_Fire_Lamp/state", "unique_id": "blinky_toy_01", "device": {"identifiers": ["living_room01"], "name": "Living" }}'
+
 
 #include <Arduino.h>
 #include <FastLED.h>
@@ -58,10 +61,11 @@ void callback(char* topic, byte* message, unsigned int length) {
 
   // If a message is received on the topic esp32/output, you check if the message is either "on" or "off". 
   // Changes the output state according to the message
-  if (String(topic) == "esp32/output") {
+  if (String(topic) == "homeassistant/light/Atomic_Fire_Lamp/set") {
     Serial.print("Changing output to ");
-    if(messageTemp == "1"){
+    if(messageTemp == "ON"){
       Serial.println("Rainbow");
+      client.publish("homeassistant/light/Atomic_Fire_Lamp/state", "ON");
       mode = 1;
     }
     else if(messageTemp == "2"){
@@ -72,8 +76,9 @@ void callback(char* topic, byte* message, unsigned int length) {
       Serial.println("White");
       mode = 3;
     }
-    else if(messageTemp == "4"){
+    else if(messageTemp == "OFF"){
       Serial.println("Off");
+      client.publish("homeassistant/light/Atomic_Fire_Lamp/state", "OFF");
       mode = 4;
     }
   }
@@ -87,7 +92,8 @@ void reconnect() {
     if (client.connect("ESP8266Client")) {
       Serial.println("connected");
       // Subscribe
-      client.subscribe("esp32/output");
+      //client.subscribe("esp32/output");
+      client.subscribe("homeassistant/light/Atomic_Fire_Lamp/set");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
