@@ -82,6 +82,14 @@ void callback(char* topic, byte* message, unsigned int length) {
       mode = 4;
     }
   }
+  else if (String(topic) == "homeassistant/status") {
+    if(messageTemp == "online") {
+      Serial.println("Home Assistant is online");
+    }
+    else if(messageTemp == "offline") {
+      Serial.println("Home Assistant is offline");
+    }
+  }
 }
 
 void reconnect() {
@@ -94,6 +102,7 @@ void reconnect() {
       // Subscribe
       //client.subscribe("esp32/output");
       client.subscribe("homeassistant/light/Atomic_Fire_Lamp/set");
+      client.subscribe("homeassistant/status");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
