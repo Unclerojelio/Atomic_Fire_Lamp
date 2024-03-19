@@ -135,9 +135,12 @@ void setup() {
   Serial.println("\nConnected to the WiFi network");
   Serial.print("Local ESP32 IP: ");
   Serial.println(WiFi.localIP());
+  Serial.print("MAC Address: ");
+  Serial.println(WiFi.macAddress());
 
 
   client.setServer(mqtt_server, 1883);
+  client.setBufferSize(1024);
   client.setCallback(callback);
 
   pinMode(LED_BUILTIN, OUTPUT);
@@ -163,7 +166,6 @@ void loop() {
     reconnect();
   }
   client.loop();
-
   switch (mode)
   {
   case 1:
