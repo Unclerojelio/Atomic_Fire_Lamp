@@ -37,6 +37,10 @@ char msg[50];
 int value = 0;
 
 int mode = 1;
+int brightness = 50;
+int red = 0;
+int green = 0;
+int blue = 0;
 
 const char* mqtt_server = "mqtt-broker.local";
 
@@ -61,26 +65,61 @@ void callback(char* topic, byte* message, unsigned int length) {
 
   // If a message is received on the topic esp32/output, you check if the message is either "on" or "off". 
   // Changes the output state according to the message
-  if (String(topic) == "homeassistant/light/Atomic_Fire_Lamp/set") {
+  if (String(topic) == "set/esp32-4022d8ee50a0/power") {
     Serial.print("Changing output to ");
     if(messageTemp == "ON"){
-      Serial.println("Rainbow");
-      client.publish("homeassistant/light/Atomic_Fire_Lamp/state", "ON");
-      mode = 1;
-    }
-    else if(messageTemp == "2"){
-      Serial.println("Fire");
-      mode = 2;
-    }
-    else if(messageTemp == "3"){
-      Serial.println("White");
-      mode = 3;
+      Serial.println("On");
+      client.publish("status/esp32-4022d8ee50a0/power", "ON");
+      //mode = 1;
     }
     else if(messageTemp == "OFF"){
       Serial.println("Off");
-      client.publish("homeassistant/light/Atomic_Fire_Lamp/state", "OFF");
+      client.publish("status/esp32-4022d8ee50a0/power", "OFF");
       mode = 4;
     }
+  }
+  else if (String(topic) == "set/esp32-4022d8ee50a0/effect") {
+    Serial.print("Changing output to ");
+    if(messageTemp == "Rainbow") {
+      Serial.println("Rainbow");
+      client.publish("status/esp32-4022d8ee50a0/effect", "Rainbow");
+      mode = 1;
+    }
+    else if(messageTemp == "Fire") {
+      Serial.println("Fire");
+      client.publish("status/esp32-4022d8ee50a0/effect", "Fire");
+      mode = 2;
+    }
+    else if(messageTemp == "Solid") {
+      Serial.println("Solid");
+      client.publish("status/esp32-4022d8ee50a0/effect", "Solid");
+      mode = 5;
+    }
+    else if(messageTemp == "White") {
+      Serial.println("White");
+      client.publish("status/esp32-4022d8ee50a0/effect", "White");
+      mode = 3;
+    }
+  }
+  else if (String(topic) == "set/esp32-4022d8ee50a0/brightness") {
+    Serial.print("Changing brightness to ");
+    Serial.println(messageTemp);
+    client.publish("status/esp32-4022d8ee50a0/brightness", messageTemp.c_str());
+    brightness = messageTemp.toInt();
+  }
+  else if (String(topic) == "set/esp32-4022d8ee50a0/rgb") {
+    Serial.print("Changing color to ");
+    Serial.println(messageTemp);
+    client.publish("status/esp32-4022d8ee50a0/rgb", messageTemp.c_str());
+    int i1 = messageTemp.indexOf(',');
+    int i2 = messageTemp.indexOf(',', i1+1);
+    String red_str = messageTemp.substring(0, i1);
+    String green_str = messageTemp.substring(i1 + 1, i2);
+    String blue_str = messageTemp.substring(i2 + 1);
+    red = red_str.toInt();
+    green = green_str.toInt();
+    blue = blue_str.toInt();
+    brightness = messageTemp.toInt();
   }
   else if (String(topic) == "homeassistant/status") {
     if(messageTemp == "online") {
@@ -99,9 +138,10 @@ void reconnect() {
     // Attempt to connect
     if (client.connect("ESP8266Client")) {
       Serial.println("connected");
-      // Subscribe
-      //client.subscribe("esp32/output");
-      client.subscribe("homeassistant/light/Atomic_Fire_Lamp/set");
+      client.subscribe("set/esp32-4022d8ee50a0/power");
+      client.subscribe("set/esp32-4022d8ee50a0/brightness");
+      client.subscribe("set/esp32-4022d8ee50a0/rgb");
+      client.subscribe("set/esp32-4022d8ee50a0/effect");
       client.subscribe("homeassistant/status");
     } else {
       Serial.print("failed, rc=");
@@ -154,7 +194,7 @@ void setup() {
   FastLED.addLeds<NEOPIXEL, ARM3>(arm3Leds, NUM_LEDS_PER_STRIP);
   FastLED.addLeds<NEOPIXEL, ARM4>(arm4Leds, NUM_LEDS_PER_STRIP);
 
-  FastLED.setBrightness(50);
+  FastLED.setBrightness(brightness);
   FastLED.clear(true);
 
   Serial.println("Waiting for connections...");
@@ -194,11 +234,11 @@ void loop() {
     break;
 
   case 5:
-    DrawSolid(CRGB(255, 0, 0));
+    DrawSolid(CRGB(red, green, blue));
     break;
   }
 
-  FastLED.show(50);
+  FastLED.show(brightness);
 
   EVERY_N_SECONDS(1) {
     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
