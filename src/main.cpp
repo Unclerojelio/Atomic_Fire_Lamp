@@ -30,6 +30,7 @@
 #include "solid.h"
 #include "secrets.h"
 
+WiFiServer server(80);
 WiFiClient espClient;
 PubSubClient client(espClient);
 long lastMsg = 0;
