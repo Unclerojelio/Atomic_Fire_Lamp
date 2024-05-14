@@ -37,8 +37,9 @@ char msg[50];
 int value = 0;
 
 int mode = 1;
+int lastMode = 1;
 int brightness = 50;
-int red = 0;
+int red = 255;
 int green = 0;
 int blue = 0;
 
@@ -70,7 +71,7 @@ void callback(char* topic, byte* message, unsigned int length) {
     if(messageTemp == "ON"){
       Serial.println("On");
       client.publish("status/esp32-4022d8ee50a0/power", "ON");
-      //mode = 1;
+      mode = lastMode;
     }
     else if(messageTemp == "OFF"){
       Serial.println("Off");
@@ -84,21 +85,25 @@ void callback(char* topic, byte* message, unsigned int length) {
       Serial.println("Rainbow");
       client.publish("status/esp32-4022d8ee50a0/effect", "Rainbow");
       mode = 1;
+      lastMode = mode;
     }
     else if(messageTemp == "Fire") {
       Serial.println("Fire");
       client.publish("status/esp32-4022d8ee50a0/effect", "Fire");
       mode = 2;
+      lastMode = mode;
     }
     else if(messageTemp == "Solid") {
       Serial.println("Solid");
       client.publish("status/esp32-4022d8ee50a0/effect", "Solid");
       mode = 5;
+      lastMode = mode;
     }
     else if(messageTemp == "White") {
       Serial.println("White");
       client.publish("status/esp32-4022d8ee50a0/effect", "White");
       mode = 3;
+      lastMode = mode;
     }
   }
   else if (String(topic) == "set/esp32-4022d8ee50a0/brightness") {
@@ -119,7 +124,6 @@ void callback(char* topic, byte* message, unsigned int length) {
     red = red_str.toInt();
     green = green_str.toInt();
     blue = blue_str.toInt();
-    brightness = messageTemp.toInt();
   }
   else if (String(topic) == "homeassistant/status") {
     if(messageTemp == "online") {
